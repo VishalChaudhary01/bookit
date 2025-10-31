@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    /* File Structure */
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    /* Module + Target Settings */
+    "module": "Node16",
+    "moduleResolution": "Node16",
+
+    "target": "es2022",
+    "lib": ["es2022"],
+    "types": ["node"],
+
+    /* Output */
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    /* Type Checking */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* Module Behavior */
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+
+    /* Misc */
+    "skipLibCheck": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
