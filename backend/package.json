@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc",
     "start": "dotenv -- node dist/index.js",
-    "dev": "dotenv -- tsc-watch --onSuccess \"node dist/index.js\""
+    "dev": "dotenv -- tsc-watch --onSuccess \"node dist/index.js\"",
+    "seed:experience": "npm run build && node dist/seeds/experience.seed.js"
   },
   "keywords": [],
   "author": "Vishal Chaudhary",
