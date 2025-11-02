@@ -27,12 +27,25 @@ export const getExperiences = async (req: Request, res: Response) => {
       .limit(limit)
       .sort({ createdAt: -1 });
 
+    const formatted = experiences.map((exp) => {
+      const priceInRupees = exp.price / 100;
+      const taxesInRupees = exp.taxes ? exp.taxes / 100 : 0;
+
+      return {
+        ...exp.toObject(),
+        price: priceInRupees,
+        taxes: taxesInRupees,
+        priceText: priceInRupees,
+        taxesText: taxesInRupees,
+      };
+    });
+
     res.status(200).json({
       success: true,
       page,
       totalPages: Math.ceil(total / limit),
       total,
-      experiences,
+      experiences: formatted,
     });
   } catch (error) {
     console.error("Error fetching experiences:", error);
@@ -44,17 +57,28 @@ export const getExperienceById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id ?? '')) {
-      return res.status(400).json({ success: false, message: "Invalid experience ID" });
+    if (!mongoose.Types.ObjectId.isValid(id ?? "")) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid experience ID" });
     }
 
     const experience = await Experience.findById(id);
 
     if (!experience) {
-      return res.status(404).json({ success: false, message: "Experience not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Experience not found" });
     }
 
-    res.status(200).json({ success: true, experience });
+    res.status(200).json({
+      success: true,
+      experience: {
+        ...experience.toObject(),
+        price: experience.price / 100,
+        taxes: experience.taxes ? experience.taxes / 100 : 0,
+      },
+    });
   } catch (error) {
     console.error("Error fetching experience:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
@@ -67,15 +91,8 @@ export const bookExperience = async (req: Request, res: Response) => {
   session.startTransaction();
 
   try {
-    const {
-      name,
-      email,
-      date,
-      slot,
-      guests,
-      promoCode,
-      totalAmount,
-    } = req.body;
+    const { name, email, date, slot, guests, promoCode, totalAmount } =
+      req.body;
 
     if (
       !name ||
@@ -129,7 +146,9 @@ export const bookExperience = async (req: Request, res: Response) => {
     let appliedPromo: string | undefined;
 
     if (promoCode) {
-      const promo = await Promo.findOne({ code: promoCode.toUpperCase() }).session(session);
+      const promo = await Promo.findOne({
+        code: promoCode.toUpperCase(),
+      }).session(session);
       if (!promo) {
         throw new Error("Invalid promo code");
       }
@@ -144,7 +163,9 @@ export const bookExperience = async (req: Request, res: Response) => {
       }
 
       if (promo.minPurchase && totalAmount * 100 < promo.minPurchase) {
-        throw new Error(`Minimum purchase of ₹${promo.minPurchase / 100} required`);
+        throw new Error(
+          `Minimum purchase of ₹${promo.minPurchase / 100} required`
+        );
       }
 
       discount = promo.discountValue / 100;

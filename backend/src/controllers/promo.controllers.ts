@@ -81,4 +81,3 @@ export const validatePromo = async (req: Request, res: Response) => {
     });
   }
 };
-

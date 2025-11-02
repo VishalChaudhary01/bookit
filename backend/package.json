@@ -10,12 +10,13 @@
     "dev": "dotenv -- tsc-watch --onSuccess \"node dist/index.js\"",
     "seed:experience": "npm run build && node dist/seeds/experience.seed.js",
     "seed:promo": "npm run build && node dist/seeds/promo.seed.js"
-
   },
   "keywords": [],
   "author": "Vishal Chaudhary",
   "license": "ISC",
   "dependencies": {
+    "@types/cors": "^2.8.19",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "mongoose": "^8.19.2"
