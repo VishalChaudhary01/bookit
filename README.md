@@ -2,6 +2,9 @@
 
 A simple end-to-end web application where users can explore travel experiences, select available slots, and complete bookings.
 
+## Available Promo
+**SAVE10**, **FLAT100**, **FIRST300**
+
 ## Technologies and Frameworks
 
 - **Backend:** Node.js with Express.js
